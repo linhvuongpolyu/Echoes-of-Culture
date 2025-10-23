@@ -1,220 +1,113 @@
-
-# Echoes of Culture — Project Proposal
+# Echoes of Culture — Final Project Proposal  
 
 **Project Title:** Echoes of Culture  
-**Team:** Echoes of Culture Collective (or your chosen team name)  
+**Team:** Echoes of Culture Collective  
 **Duration:** ~5–6 weeks  
-**Tools:** Python (pygame / processing.py / tkinter), pygame.mixer or pyaudio, JSON for data, GitHub for version control  
-**Prepared by:** Linh (Project Lead / Creative Director)
+**Tools:** Python (Pygame, Processing.py, Tkinter), Pygame.mixer or PyAudio, JSON for cultural data, GitHub for collaboration  
+**Prepared by:** Linh (Project Manager / Creative Director)
 
 ---
 
 ## 1. Executive Summary
-"Echoes of Culture" is an interactive audiovisual installation that celebrates cultural diversity through clickable visual symbols that trigger short sound samples and generative animations. The experience aims to let users co-create a "global symphony" by exploring cultural icons — each interaction contributing a layer of color, motion, and sound. The project balances creative storytelling with technical implementation and is designed to be completed within ~5–6 weeks by a 4-person team.
+Echoes of Culture is an interactive audiovisual installation celebrating cultural diversity through sound, motion, and digital storytelling.  
+The experience reimagines a “living cultural sound map,” allowing users to awaken forgotten voices from different Asian cultures.  
+Each interaction is an act of listening, healing, and remembrance—forming a global symphony that restores harmony across diversity.
 
 ---
 
 ## 2. Objectives
-- Showcase cultural diversity and promote understanding via an interactive medium.  
-- Leverage creative coding to translate cultural artifacts into audiovisual building blocks.  
-- Deliver a polished interactive demo and a clear presentation of the creative & technical process.
+- Showcase cultural richness through an immersive interactive medium.  
+- Merge coding, design, and sound art into one cohesive experience.  
+- Raise awareness of cultural heritage through multisensory storytelling.  
+- Encourage collaborative creation blending art and technology.
 
 ---
 
-## 3. Target Audience & Use Case
-- Course instructors and classmates (grading/demo).  
-- Public demo audience (campus exhibition) — friendly for non-technical users.  
-- Use case: short interactive installation or web-like application for live demo (screen + audio).
+## 3. Creative Direction Overview
+**Theme:** A Living Map of Memories  
+**Core Concept:** Listening as healing — each user interaction revives a cultural echo.  
+**Tone & Atmosphere:** Mystical, contemplative, restorative, and cross-sensory.  
+
+**Narrative Arc:**  
+1. *Silence* — The world falls into quiet; its songs sleep beneath time.  
+2. *Discovery* — Touch reveals resonant cultural voices.  
+3. *Awakening* — Rhythms return: bell, drum, wind, voice.  
+4. *Harmony* — All sounds and visuals merge in balance.  
+5. *Resolution* — The world hums again through your interaction.  
+
+> “When you listen, the world breathes again.”
 
 ---
 
-## 4. Core Features (Minimum Viable Product)
-1. **Interactive Cultural Map:** A main screen with 6–8 clickable cultural symbols/icons.  
-2. **Sound Triggers:** Each symbol plays a short (3–6s) sound clip representative of that culture.  
-3. **Generative Visuals:** Clicking a symbol spawns a visual animation (particles, patterns, or shape morph) matching the sound's mood.  
-4. **Mixing / Global Symphony:** Multiple active sounds/visuals blend into a cohesive audiovisual output.  
-5. **Simple UI:** Title screen, help/instructions popup, credits, and a "reset" button.  
-6. **Data File:** A JSON file with cultural elements (id, name, region, audio file path, icon path, color palette, description, credit).
+## 4. Target Audience
+- Audiences interested in art, sound, and cultural heritage.  
+- Museum visitors, design students, and digital arts practitioners.  
+- Participants seeking contemplative, interactive installations.
 
 ---
 
-## 5. Suggested Technical Stack
-- **Language:** Python 3.x  
-- **Visuals / Interaction:** `pygame` or `processing.py` (choose based on team familiarity)  
-- **Audio:** `pygame.mixer` for simple playback or `pyaudio` for lower-level control; consider `sounddevice` if available.  
-- **Data & Assets:** JSON for metadata; store audio (wav/mp3), SVG/PNG icons, and small sample images in `assets/`.  
-- **Version Control:** Git + GitHub (branch per feature / per week).  
-- **Presentation:** Record demo via screen recorder (OBS or built-in recorder) and create a 4–6 slide deck.
+## 5. Project Features
+1. Interactive audiovisual map triggering sound and motion.  
+2. JSON-based structure storing cultural data (region, sound, color, keyword).  
+3. Dynamic layering of sounds when multiple symbols triggered.  
+4. Gradual evolution of color and rhythm by user interaction frequency.  
+5. Ambient audio system blending multiple tracks in real time.
 
 ---
 
-## 6. Data Schema (example JSON entry)
-```
-{
-  "id": "jp_taiko",
-  "name": "Taiko Drum — Japan",
-  "region": "East Asia",
-  "audio": "assets/audio/japan_taiko.wav",
-  "icon": "assets/icons/taiko.png",
-  "colors": ["#DCR14A", "#E63946", "#2B2D42"],
-  "animation_type": "pulse_rings",
-  "description": "Short taiko drum rhythm representing festival energy.",
-  "credit": "Sourced from [source], licensed under CC-BY"
-}
-```
+## 6. Art & Sound Identity
+**Visual Language:**  
+- Simplified cultural icons inspired by Asian heritage.  
+- Warm gradients, organic motion, and meditative tones.  
+- Visual harmony between animated shapes, colors, and rhythm.  
+
+**Sound Identity:**  
+- Use of traditional instrumental samples (drums, flutes, vocals, bells).  
+- Ambient field layers (wind, water, chanting) for immersive effect.  
+- Each action contributes a unique sonic layer to the global soundscape.
 
 ---
 
-## 7. UX / Interaction Flow
-1. **Landing Screen:** Project title, short instructions ("Click symbols to play sounds and paint the screen. Press Reset to clear.").  
-2. **Main Canvas:** Grid or circular map with 6–8 symbols representing cultures. Hover shows short tooltip; click triggers sound + animation.  
-3. **Symphony Mode:** As multiple symbols are triggered, the system mixes audio tracks and layers visuals. Visual intensity corresponds to audio amplitude or number of active tracks.  
-4. **Reset & Credits:** Reset returns to idle state. Credits screen lists cultural sources and team roles.
+## 7. Roles & Responsibilities
+| Role | Member | Summary |
+|------|---------|----------|
+| Project Manager / Creative Director | Linh | Define creative direction, align team, assign tasks, organize documentation, coordinate reminders |
+| Coder | Chenyue | Research & implement core coding frameworks/libraries |
+| Designer | Jingyi | Create moodboard, choose fonts/styles, develop visual assets |
+| Sound Designer | Selina | Source and edit traditional sound samples; compose ambient layers |
 
 ---
 
-## 8. Art Direction & Sound Design
-- **Visual Style:** Minimal, symbolic icons with generative patterns inspired by each culture's traditional motifs. Use simple palettes per culture (2–4 main colors). Animations should be smooth and not overly CPU-heavy (avoid thousands of particles unless optimized).  
-- **Sound Style:** Short authentic or inspired audio clips (3–6 seconds) — percussion loops, short melodic phrases, or ambient textures. Normalize volume levels and use simple mixing to avoid clipping.  
-- **Accessibility:** Provide captions/short text descriptions for each cultural element and avoid flashing patterns that may trigger discomfort.
+## 8. Timeline (5 Weeks)
+| Week | Focus | Deliverables |
+|------|--------|--------------|
+| 1 | Ideation & research | Moodboard, sound/visual references, concept alignment |
+| 2 | Design & prototype | UI sketches, basic trigger test, initial code architecture |
+| 3 | Development | Core interactive features, sound-image linking |
+| 4 | Testing & refinement | Polish UX, fine-tune transitions, sound balance |
+| 5 | Finalization | Record demo, finalize GitHub documentation, presentation material |
 
 ---
 
-## 9. Detailed Task List & Weekly Breakdown
+## 9. Deliverables & Assessment Criteria
+- Complete Python-based interactive map with audiovisual response.  
+- Creative Direction document describing tone & concept.  
+- Team meeting notes and GitHub documentation.  
+- Presentation slides and demonstration video.
 
-### Week 1 — Research & Concept Finalization (Deliverables: moodboard, dataset plan)
-- Team meeting: finalize 6–8 cultures to include.  
-- Research & collect 2–3 sound candidates per culture (researcher).  
-- Create moodboard: color palettes, icon references (designer).  
-- Draft JSON schema and project repo skeleton (lead coder).
-
-**Assigned:**  
-- Linh: overall creative direction, moodboard, icon style guide.  
-- Member B (Research): find sound references + licensing notes.  
-- Member A (Lead Coder): repo setup, starter window code.  
-- Member C (Visual Designer): rough icon sketches.
+**Attached References:**  
+- `/docs/Creative-Direction-1.pdf`  
+- `/meeting-notes/2025-10-20-team-meeting.md`
 
 ---
 
-### Week 2 — Prototype UI & Asset Collection (Deliverables: visual prototype, sample assets)
-- Implement a static main canvas with placeholder icons.  
-- Implement click detection and simple visual response (placeholder animation).  
-- Finalize + convert audio clips to appropriate format (wav recommended).  
-- Organize assets in `assets/` and populate initial JSON.
-
-**Assigned:**  
-- Lead Coder: implement canvas + interaction detection.  
-- Visual Designer: finalize 6–8 icons and export PNGs/SVGs.  
-- Sound Integrator: process audio files, normalize, and test playback.  
-- Linh: review visual/audio cohesion and update palette.
+## 10. Final Review Checklist
+- [x] Updated creative direction and emotional arc.  
+- [x] Defined key visuals and sound palette.  
+- [x] Set five-week timeline with clear deliverables.  
+- [x] Integrated creative and technical workflows.  
+- [x] Uploaded summary and meeting notes to GitHub.
 
 ---
 
-### Week 3 — Core Development: Visuals & Sound Integration (Deliverables: playable beta)
-- Integrate audio playback with click events.  
-- Implement 2–3 animation types (e.g., pulse, radial particles, pattern growth).  
-- Implement audio mixing logic and simple volume control.  
-- Add tooltip and simple instruction overlay.
-
-**Assigned:**  
-- Lead Coder & Sound Integrator: integrate audio & visuals, implement mixing.  
-- Visual Designer: refine animations and transitions.  
-- Linh: test experience flow & user clarity.
-
----
-
-### Week 4 — Polishing & Performance Optimization (Deliverables: near-final build)
-- Add more animations and refine timing with audio.  
-- Optimize frame rate and reduce CPU usage (limit particle counts, use surfaces).  
-- Expand dataset to final 6–8 cultural entries.  
-- Conduct internal user testing and document issues.
-
-**Assigned:**  
-- Entire team: bug fixes, usability testing, performance tweaks.  
-- Member B: ensure proper credits and license documentation.
-
----
-
-### Week 5 — Finalization & Presentation (Deliverables: final build, slides, demo video)
-- Final polish: UI, transitions, credits screen.  
-- Record a 2–3 minute demo video showing core interactions.  
-- Prepare a 4–6 slide presentation: concept, process, demo, reflection.  
-- Final testing and packaging (zip repository with README).
-
-**Assigned:**  
-- Linh: finalize presentation & script.  
-- Lead Coder & Sound Integrator: produce final build and ensure portability.  
-- Visual Designer & Researcher: finalize credits and asset list.
-
----
-
-## 10. Quality Assurance & Testing Plan
-- Weekly playtest sessions (30–60 mins) with at least 2 external testers.  
-- Test on the target hardware (laptop with standard CPU) to check performance.  
-- Accessibility check: provide alt-text descriptions and ensure no high-frequency flashing.  
-- Sound balancing: normalize audio and test with headphones & speakers.
-
----
-
-## 11. Repo Structure (suggestion)
-```
-/echoes-of-culture
-  /assets
-    /audio
-    /icons
-    /images
-  /src
-    main.py
-    visuals.py
-    audio.py
-    data_loader.py
-  /docs
-    proposal.md
-    LICENSES.md
-  README.md
-```
-
----
-
-## 12. Risks & Mitigations
-- **Risk:** Licensing issues for authentic cultural sounds.  
-  **Mitigation:** Use CC-licensed sounds, public domain resources, or create short inspired loops; document sources carefully.  
-- **Risk:** Performance issues with many audio tracks/particles.  
-  **Mitigation:** Limit concurrent tracks, use lightweight animations, and optimize code.  
-- **Risk:** Conflict on creative direction.  
-  **Mitigation:** Weekly check-ins, clear task ownership, and Linh to mediate design decisions.
-
----
-
-## 13. Deliverables & Assessment Criteria
-- Working interactive application with 6–8 cultural elements.  
-- Short demo video (2–3 minutes).  
-- Presentation slides (4–6 slides) and final documentation (README + credits).  
-- Reflection on design choices and cultural research.
-
----
-
-## 14. Next Steps (Immediate)
-1. Share this proposal with the team and agree on roles.  
-2. Kick-off meeting: confirm cultures list and assign Week 1 tasks.  
-3. Create GitHub repo and push a starter branch (Lead Coder).  
-4. Linh to prepare the moodboard and visual references.
-
----
-
-**Appendix: Example Cultures to Consider (mix of regions & sound types)**  
-- Japan (taiko/percussive rhythm)  
-- Ghana (kpanlogo / percussion)  
-- Vietnam (dan tranh or traditional motif)  
-- India (tabla or short melodic phrase)  
-- Mexico (maracas / short trumpet motif)  
-- Ireland (bodhrán or fiddle motif)
-
----
-
-**Contact / Questions**  
-If the team wants, I can also:  
-- Produce a 1-page visual timeline (Gantt-like) as a PDF.  
-- Generate a short slide deck (4 slides) for presentation.  
-- Draft the initial GitHub README and repo skeleton.
-
+**End of Final Proposal Document.**
