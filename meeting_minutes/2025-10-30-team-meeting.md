@@ -48,10 +48,3 @@
 
 - Task assignments and reminders will be shared via team communication channels.
 - Reference materials and deliverables to be uploaded to shared repositories or cloud storage for access.
-
----
-
-## 6. Open Questions
-
-- Any additional input on interactive features or content for the project?
-- Any blockers or support needed for research or development?
