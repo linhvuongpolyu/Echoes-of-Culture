@@ -9,6 +9,7 @@ All Drive links are access-restricted. For permissions, please contact a project
 
 | Name                     | Type        | Description                                      | Last Updated     | Link                 |
 |--------------------------|-------------|--------------------------------------------------|------------------|----------------------|
+| Elements | Folder | Design Elements for wireframe     | 17 Nov 2025      | [Drive link](https://drive.google.com/drive/u/0/folders/1lmsbAedR7xtr-aRCCMeZTl77piQaWAoy)         |
 | Performance & Food Questions | Folder | Research, quiz questions on performances/food     | 07 Nov 2025      | [Drive link](https://drive.google.com/drive/u/0/folders/1tmZR5uNreeAOfQgzzlFBPW3dOjhSGlWj)         |
 | food.xlsx                | File        | Research spreadsheet on food topics               | 07 Nov 2025      | [Drive link](https://docs.google.com/spreadsheets/d/1-AoqrRGpwgkhtXn1_OZPfGdeIsnxxzvP/edit?usp=drive_web&ouid=112372597189078709978&rtpof=true)         |
 | Background Music         | Folder      | Music files & references for app background       | 01 Nov 2025      | [Drive link](https://drive.google.com/drive/u/0/folders/1TazDs_4VdTI2qjj7_r4f4njiFfMi33Vk)         |
@@ -29,6 +30,7 @@ All Drive links are access-restricted. For permissions, please contact a project
 
 ## Update & Maintenance Log
 
+- 17 Nov 2025: Updated elements for UI wireframe
 - 13 Nov 2025: Updated research folders/links.
 - 08 Nov 2025: Added first prototype demo.
 - 07 Nov 2025: Updated food research files and questions.
@@ -38,4 +40,4 @@ All Drive links are access-restricted. For permissions, please contact a project
 
 ---
 
-_Last updated: 13 Nov 2025_
+_Last updated: 20 Nov 2025_
