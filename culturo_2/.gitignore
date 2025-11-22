@@ -1,0 +1,10 @@
+# 虚拟环境
+venv/
+.venv/
+env/
+ENV/
+
+# 其他常见的排除项
+__pycache__/
+*.pyc
+.DS_Store  # (Mac)
