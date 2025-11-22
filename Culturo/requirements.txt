@@ -1,0 +1,8 @@
+# Culturo - Cultural Knowledge Exploration App
+# Core dependencies for Streamlit-based application
+
+# Streamlit framework
+streamlit>=1.28.0
+
+# For HTTP requests (kept for potential future use)
+requests>=2.31.0

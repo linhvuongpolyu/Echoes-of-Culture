@@ -1,0 +1,31 @@
+# Streamlit Configuration for Culturo App
+
+[server]
+# Disable headless mode to allow browser opening
+headless = false
+
+# Port configuration (default is 8501)
+port = 8501
+
+[browser]
+# Disable usage stats collection
+gatherUsageStats = false
+
+# Only open browser once
+serverAddress = "localhost"
+
+[client]
+# Show less verbose error messages
+showErrorDetails = true
+
+[runner]
+# Faster reruns
+fastReruns = true
+
+[theme]
+# Optional: You can customize the theme here
+# primaryColor = "#FF4B4B"
+# backgroundColor = "#FFFFFF"
+# secondaryBackgroundColor = "#F0F2F6"
+# textColor = "#262730"
+

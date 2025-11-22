@@ -1,0 +1,10 @@
+# Virtual Environment
+venv/
+.venv/
+env/
+ENV/
+
+# Other common exclusions
+__pycache__/
+*.pyc
+.DS_Store  # (Mac)
