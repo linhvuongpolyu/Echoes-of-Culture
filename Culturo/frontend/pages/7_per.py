@@ -363,7 +363,7 @@ def main():
         except Exception as e:
             st.error(f"Unable to play video: {e}")
             # Fallback to online video
-            st.video('https://sample-videos
+            st.video('assets/videos/fallback_video.mp4')
     else:
         st.warning("Video not available for the selected region.")
     
