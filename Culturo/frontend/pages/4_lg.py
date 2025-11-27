@@ -10,23 +10,27 @@ sys.path.append(str(frontend_dir))
 
 from utils.star_manager import star_manager
 
-# Page configuration - hide sidebar
+# Page configuration
 st.set_page_config(
     page_title="Language",
     page_icon="🗣️",
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="expanded"
 )
 
-# CSS to completely hide sidebar
+# CSS styles
 st.markdown("""
     <style>
+        /* Hide page navigation */
+        [data-testid="stSidebarNav"] {
+            display: none;
+        }
+        
+        /* Sidebar styling - solid white */
         [data-testid="stSidebar"] {
-            display: none;
+            background: #FFFFFF !important;
         }
-        [data-testid="collapsedControl"] {
-            display: none;
-        }
+        
         /* Adjust main content area spacing */
         .main .block-container {
             padding-top: 2rem;
@@ -215,7 +219,7 @@ def main():
             index=None
         )
         
-        submitted = st.form_submit_button("Submit Answer", type="primary", use_container_width=True)
+        submitted = st.form_submit_button("Submit Answer", type="primary", width="stretch")
     
     # Handle form submission
     if submitted:
@@ -267,14 +271,14 @@ def main():
         col1, col2, col3 = st.columns(3)
         
         with col1:
-            if st.button("Try Again", use_container_width=True):
+            if st.button("Try Again", width="stretch"):
                 st.session_state.language_submitted = False
                 st.session_state.language_stars = 0
                 st.session_state.user_answer = None
                 st.rerun()
         
         with col2:
-            if st.button("Back to Main", use_container_width=True):
+            if st.button("Back to Main", width="stretch"):
                 # Increment navigation counter and clear region state
                 st.session_state.nav_counter += 1
                 if 'current_region' in st.session_state:
@@ -282,7 +286,7 @@ def main():
                 st.switch_page("main_app.py")
         
         with col3:
-            if st.button(f"Back to {current_region}", use_container_width=True):
+            if st.button(f"Back to {current_region}", width="stretch"):
                 # Increment navigation counter for fresh render
                 st.session_state.nav_counter += 1
                 # Navigate back to corresponding page based on region
@@ -291,6 +295,42 @@ def main():
                 elif current_region == "China":
                     st.switch_page("pages/2_cn.py")
                 elif current_region == "Vietnam":
+                    st.switch_page("pages/3_vn.py")
+    
+    # Sidebar
+    logo_path = Path(__file__).parent.parent / "assets" / "images" / "Cultoro.jpg"
+    with st.sidebar:
+        if logo_path.exists():
+            st.image(str(logo_path), width=200)
+        else:
+            st.markdown(
+                """
+                <div style="text-align:center; padding:1rem 0;">
+                    <h3>🌍 Culturo</h3>
+                    <p style="font-size:0.8rem; color:#666; margin:0;">Discover culture all the world!</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+        if st.button("← General", key="sidebar_general_lang", width="stretch"):
+            st.session_state.nav_counter += 1
+            if 'current_region' in st.session_state:
+                del st.session_state['current_region']
+            st.switch_page("main_app.py")
+
+        with st.expander("Discover", expanded=True):
+            if st.button("China", key="nav_cn_from_lang", width="stretch", disabled=(current_region == "China")):
+                if current_region != "China":
+                    st.session_state.current_region = "China"
+                    st.switch_page("pages/2_cn.py")
+            if st.button("Hong Kong", key="nav_hk_from_lang", width="stretch", disabled=(current_region == "Hong Kong")):
+                if current_region != "Hong Kong":
+                    st.session_state.current_region = "Hong Kong"
+                    st.switch_page("pages/1_hk.py")
+            if st.button("Viet Nam", key="nav_vn_from_lang", width="stretch", disabled=(current_region == "Vietnam")):
+                if current_region != "Vietnam":
+                    st.session_state.current_region = "Vietnam"
                     st.switch_page("pages/3_vn.py")
     
     # Display current progress

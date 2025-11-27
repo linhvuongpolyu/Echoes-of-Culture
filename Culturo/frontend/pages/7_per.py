@@ -400,7 +400,7 @@ def main():
             st.markdown("<br>", unsafe_allow_html=True)
         
         # Submit button inside the form
-        submitted = st.form_submit_button("Submit Answer", type="primary", use_container_width=True)
+        submitted = st.form_submit_button("Submit Answer", type="primary", width="stretch")
     
     # Handle form submission
     if submitted:
@@ -461,7 +461,7 @@ def main():
         col1, col2, col3 = st.columns(3)
         
         with col1:
-            if st.button("Retry Quiz", use_container_width=True):
+            if st.button("Retry Quiz", width="stretch"):
                 st.session_state.per_quiz_answers = [None, None, None]
                 st.session_state.per_quiz_submitted = False
                 st.session_state.per_quiz_score = 0

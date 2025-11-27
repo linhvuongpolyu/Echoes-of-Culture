@@ -12,9 +12,9 @@
     "Performance": 0
   },
   "Vietnam": {
-    "Language": 0,
-    "Draw Animals": 0,
-    "Food": 0,
-    "Performance": 0
+    "Language": 3,
+    "Draw Animals": 3,
+    "Food": 1,
+    "Performance": 2
   }
 }

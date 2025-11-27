@@ -6,19 +6,19 @@ The app has been simplified to use **pure Streamlit** - no backend API server ne
 
 ### 1. Install Dependencies
 
-```bash
+```
 pip install -r requirements.txt
 ```
 
 ### 2. Run the Application
 
 **Option A: Using the launcher script (Recommended)**
-```bash
+```
 python start_app.py
 ```
 
 **Option B: Direct Streamlit command**
-```bash
+```
 cd frontend
 streamlit run main_app.py
 ```
