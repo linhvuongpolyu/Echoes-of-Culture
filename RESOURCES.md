@@ -24,7 +24,7 @@ All Drive links are access-restricted. For permissions, please contact a project
 | Name                  | Description                       | Date        | Link                |
 |-----------------------|-----------------------------------|-------------|---------------------|
 | First Prototype Demo  | Figma demo – initial app prototype| 04 Nov 2025 | [Figma link](https://www.figma.com/make/0N2orI5ZyjkSRGIkplq3SU/Cultural-Education-App?node-id=0-1&t=BgZ1GVl20TiyFkqf-1)        |
-| Final Prototype Demo  | Figma demo - Update more about UI | 26 Nov 2025 | [Figma link] (https://www.figma.com/proto/tDL9zjr2tTVMXZVNN2CVW4/Culturo-Prototype?page-id=0%3A1&node-id=99-290&p=f&viewport=-4280%2C-915%2C0.45&t=Uo55eg1ahEivCNIQ-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=99%3A290) |
+| Final Prototype Demo  | Figma demo - Update more about UI | 26 Nov 2025 | [Figma link](https://www.figma.com/proto/tDL9zjr2tTVMXZVNN2CVW4/Culturo-Prototype?page-id=0%3A1&node-id=99-290&p=f&viewport=-4280%2C-915%2C0.45&t=Uo55eg1ahEivCNIQ-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=99%3A290)|
 
 ---
 
