@@ -10,23 +10,47 @@ sys.path.append(str(frontend_dir))
 
 from utils.star_manager import star_manager
 
-# Page configuration - hide sidebar
+# Build absolute path to logo
+logo_path = Path(__file__).parent.parent.parent / "assets" / "images" / "Cultoro.jpg"
+logo_icon_path = Path(__file__).parent.parent.parent / "assets" / "images" / "logo.png"
+logo_icon = str(logo_icon_path) if logo_icon_path.exists() else "🎭"
+
+# Page configuration
 st.set_page_config(
-    page_title="Performance Culture Quiz",
-    page_icon="🎭",
+    page_title="Performance - Culturo",
+    page_icon=logo_icon,
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="expanded"
 )
 
-# CSS to completely hide sidebar
+# CSS styling
 st.markdown("""
     <style>
+        /* Hide sidebar navigation items above logo */
+        [data-testid="stSidebarNav"] {
+            display: none;
+        }
+        /* Remove top padding from sidebar */
+        section[data-testid="stSidebar"] > div {
+            padding-top: 1rem;
+        }
+        
+        /* Sidebar styling - solid white */
         [data-testid="stSidebar"] {
-            display: none;
+            background: #FFFFFF !important;
         }
-        [data-testid="collapsedControl"] {
-            display: none;
+        
+        /* Page background: solid color */
+        html, body, .stApp {
+            background: #EFF8FF !important;
+            background-attachment: fixed !important;
+            min-height: 100vh !important;
         }
+        /* Make inner containers transparent so background shows through */
+        .main, .block-container, .stApp > header, [data-testid="stHeader"] {
+            background: transparent !important;
+        }
+        
         /* Adjust main content area spacing */
         .main .block-container {
             padding-top: 2rem;
@@ -34,6 +58,10 @@ st.markdown("""
             padding-right: 1rem;
             max-width: 100%;
         }
+        
+        /* Header row tweaks */
+        .vn-header { display: flex; align-items: center; gap: 6px; }
+        
         /* Video styling */
         .video-container {
             display: flex;
@@ -125,21 +153,16 @@ def initialize_quiz():
     if 'per_quiz_score' not in st.session_state:
         st.session_state.per_quiz_score = 0
 
+def reset_performance_state():
+    st.session_state.per_quiz_answers = [None, None, None]
+    st.session_state.per_quiz_submitted = False
+    st.session_state.per_quiz_score = 0
+    if 'per_current_question' in st.session_state:
+        st.session_state.per_current_question = 0
+
 # Get current region from session state
 def get_current_region():
-    current_region = st.session_state.get('current_region', 'Hong Kong')
-
-    # Check if the region has changed
-    if 'last_region' in st.session_state and st.session_state['last_region'] != current_region:
-        # Reset performance-related session state variables
-        st.session_state.performance_quiz_answers = [None, None, None]
-        st.session_state.performance_quiz_submitted = False
-        st.session_state.performance_quiz_score = 0
-
-    # Update the last_region to the current region
-    st.session_state['last_region'] = current_region
-
-    return current_region
+    return st.session_state.get('current_region', 'Hong Kong')
 
 # Get region-specific video file
 def get_region_video(region):
@@ -188,14 +211,14 @@ def get_region_quiz_data(region):
                 "correct_answer": "They stand and manipulate the puppets using long bamboo rods and strings from behind a bamboo screen, hidden in waist-deep water."
             },
             {
-                "question": "What is the historical origin of water puppetry in Vietnam, and which region is it most associated with?",
+                "question": "What are the traditional stories of Water Puppetry primarily based on?",
                 "options": [
-                    "It originated in the imperial city of Hue in central Vietnam during the 15th century.",
-                    "It began in the Mekong Delta in southern Vietnam as a form of entertainment for fishermen.",
-                    "It originated in the villages of the Red River Delta in northern Vietnam around the 11th century.",
-                    "It was imported from China during the period of Chinese domination."
+                    "Scenes from daily rural life and ancient Vietnamese folklore.",
+                    "Tales from Indian mythology and epic poems",
+                    "Stories about the royal court and famous emperors.",
+                    "Buddhist parables and religious teachings."
                 ],
-                "correct_answer": "It originated in the villages of the Red River Delta in northern Vietnam around the 11th century."
+                "correct_answer": "Scenes from daily rural life and ancient Vietnamese folklore."
             }
         ],
         'China': [
@@ -246,10 +269,10 @@ def get_region_quiz_data(region):
                 "options": [
                     "The legend of the Monkey King",
                     "The story of a famous Qing Dynasty emperor",
-                    "The heroes from the classic novel Water Margin",
+                    "The heroes from the classic novel Outlaws of the Marshes",
                     "A celebration of the harvest season"
                 ],
-                "correct_answer": "The heroes from the classic novel Water Margin"
+                "correct_answer": "The heroes from the classic novel Outlaws of the Marshes"
             },
             {
                 "question": "Which of these is a characteristic feature of the dancers' appearance?",
@@ -338,157 +361,276 @@ def main():
     # Get current region
     current_region = get_current_region()
     
-    # Set page title based on region
-    st.title(f"🎭 {current_region} Performance Culture")
-    st.markdown(f"### Explore the unique performance culture of {current_region} and test your knowledge!")
+    # Check if region changed and reset performance state if needed
+    if 'last_performance_region' not in st.session_state:
+        st.session_state.last_performance_region = current_region
+    elif st.session_state.last_performance_region != current_region:
+        reset_performance_state()
+        st.session_state.last_performance_region = current_region
     
     # Initialize quiz state
     initialize_quiz()
     
-    # Display region header
-    st.markdown(f'<div class="region-header">', unsafe_allow_html=True)
-    st.markdown(f"### Currently exploring: {current_region}")
-    st.markdown('</div>', unsafe_allow_html=True)
+    # Get current stars for performance activity
+    current_stars = star_manager.get_stars(current_region).get('Performance', 0)
     
-    # Display video
-    st.markdown("---")
-    st.markdown(f"### 🎬 {current_region} Performance Culture Video")
+    # Header: Back button, title, and stars in the same row
+    header_left, header_middle, header_right = st.columns([0.1, 0.75, 0.15])
+    with header_left:
+        back_clicked = st.button("←\nBack", key="back_btn_per", width='stretch')
+    with header_middle:
+        # Get flag URL based on region
+        flag_urls = {
+            'Vietnam': 'https://flagcdn.com/w80/vn.png',
+            'China': 'https://flagcdn.com/w80/cn.png',
+            'Hong Kong': 'https://flagcdn.com/w80/hk.png'
+        }
+        flag_url = flag_urls.get(current_region, '')
+        
+        # Get region color
+        region_colors = {
+            'Vietnam': '#1C8575',  # VN teal-green
+            'China': '#DE5862',    # China warm red
+            'Hong Kong': '#DA901E' # HK amber
+        }
+        region_color = region_colors.get(current_region, '#1C8575')
+        
+        st.markdown(f"""
+            <div class="vn-header">
+                <img src="{flag_url}" width="50" height="33" style="border-radius: 3px;" />
+                <div style="display: flex; flex-direction: column;">
+                    <h2 style="margin: 0; padding: 0; color: {region_color}; font-size: 1.6rem; font-weight: 600; line-height: 1;">Performance Art</h2>
+                    <p style="margin: 0; padding: 0; color: #666; font-size: 0.9rem; line-height: 1;">Ready to explore art from around the world?</p>
+                </div>
+            </div>
+        """, unsafe_allow_html=True)
     
-    # Get the correct video for the current region
-    video_path = get_region_video(current_region)
+    with header_right:
+        # Display stars on the right
+        filled_stars = '⭐' * current_stars
+        empty_stars = '☆' * (3 - current_stars)
+        st.markdown(f"""
+            <div style="text-align: right; padding-top: 8px;">
+                <div style="font-size: 1.5rem; letter-spacing: 2px; display: inline-block;">{filled_stars}{empty_stars} <span style="font-size: 0.9rem; color: #666; margin-left: 8px;">{current_stars}/3</span></div>
+            </div>
+        """, unsafe_allow_html=True)
     
-    if video_path and os.path.exists(video_path):
-        try:
-            st.video(video_path)
-        except Exception as e:
-            st.error(f"Unable to play video: {e}")
-            # Fallback to online video
-            st.video('assets/videos/fallback_video.mp4')
-    else:
-        st.warning("Video not available for the selected region.")
+    if back_clicked:
+        st.session_state.nav_counter += 1
+        reset_performance_state()  # Reset performance state when switching regions
+        # Navigate back based on region
+        if current_region == "Hong Kong":
+            st.switch_page("pages/1_hk.py")
+        elif current_region == "China":
+            st.switch_page("pages/2_cn.py")
+        elif current_region == "Vietnam":
+            st.switch_page("pages/3_vn.py")
     
     # Get region-specific quiz questions
     quiz_data = get_region_quiz_data(current_region)
     
-    # Use table to wrap questions and submit button for single submission
-    with st.form(key='quiz_form'):
-        # Display questions - Removed the container borders
-        for i, q in enumerate(quiz_data):
-            # Removed the container with background color
-            st.markdown(f'<div class="question">Question {i+1}: {q["question"]}</div>', unsafe_allow_html=True)
-            
-            # Get current answer or default to None
-            current_answer = st.session_state.per_quiz_answers[i]
-
-            # Ensure current_answer is valid before finding index
-            if current_answer not in q["options"]:
-                current_answer = None
-
-            # Create radio buttons for options
-            user_answer = st.radio(
-                f"Select your answer for question {i+1}:",
-                q["options"],
-                key=f"per_q{i}_{current_region}",
-                index=None if current_answer is None else q["options"].index(current_answer)
-            )
-
-            # Store the answer
-            if user_answer:
-                st.session_state.per_quiz_answers[i] = user_answer
-
-            # Add some space between questions
-            st.markdown("<br>", unsafe_allow_html=True)
-        
-        # Submit button inside the form
-        submitted = st.form_submit_button("Submit Answer", type="primary", width="stretch")
+    # Initialize current question index
+    if 'per_current_question' not in st.session_state:
+        st.session_state.per_current_question = 0
     
-    # Handle form submission
-    if submitted:
-        # Check if all questions are answered
-        if None in st.session_state.per_quiz_answers:
-            st.error("Please answer all questions before submitting.")
+    current_q_index = st.session_state.per_current_question
+    
+    # Add spacing between header and content
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Create two columns layout
+    video_col, quiz_col = st.columns([0.5, 0.5])
+    
+    with video_col:
+        # Get the correct video for the current region
+        video_path = get_region_video(current_region)
+        
+        if video_path and os.path.exists(video_path):
+            try:
+                st.video(video_path)
+                st.markdown("<p style='text-align: center; color: #666; font-size: 0.9rem; margin-top: 0.5rem;'>Click play to watch the video</p>", unsafe_allow_html=True)
+            except Exception as e:
+                st.error(f"Unable to play video: {e}")
         else:
-            # Calculate score
-            score = 0
-            for i, q in enumerate(quiz_data):
-                if st.session_state.per_quiz_answers[i] == q["correct_answer"]:
-                    score += 1
-            
-            st.session_state.per_quiz_score = score
-            st.session_state.per_quiz_submitted = True
-            
-            # Save stars using star_manager
-            star_manager.update_stars(current_region, 'Performance', score)
-            
-            st.rerun()
-    
-    # Display results if submitted
-    if st.session_state.per_quiz_submitted:
-        st.markdown("---")
-        st.markdown("### 📊 Quiz Results")
+            st.warning("Video not available for the selected region.")
         
-        # Show score and stars earned
-        st.markdown(f'<div class="star-result">', unsafe_allow_html=True)
-        st.markdown(f"### You earned {st.session_state.per_quiz_score} out of 3 stars! ⭐")
-        
-        # Display star visualization
-        stars_display = "⭐" * st.session_state.per_quiz_score + "☆" * (3 - st.session_state.per_quiz_score)
-        st.markdown(f"### {stars_display}")
-        
-        # Show encouragement message based on score
-        encouragement_msg = get_encouragement_message(st.session_state.per_quiz_score, current_region)
-        st.markdown(f'<div class="encouragement">{encouragement_msg}</div>', unsafe_allow_html=True)
-        
-        # Show correct answers with user answers
-        st.markdown("### Question Review:")
-        for i, q in enumerate(quiz_data):
-            user_answer = st.session_state.per_quiz_answers[i]
-            correct_answer = q["correct_answer"]
-            is_correct = user_answer == correct_answer
-            
-            if is_correct:
-                st.markdown(f"✅ **Question {i+1}:** Your answer '{user_answer}' is correct!")
-            else:
-                # 安全地处理用户答案和正确答案
-                user_answer_display = user_answer if user_answer else "No answer"
-                st.markdown(f"❌ **Question {i+1}:** Your answer '{user_answer_display}' is incorrect.")
-                st.markdown(f"<span class='correct-answer'>Correct answer: {correct_answer}</span>", unsafe_allow_html=True)
-        
-        st.markdown('</div>', unsafe_allow_html=True)
-        
-        # Reset or navigation buttons
-        st.markdown("---")
-        col1, col2, col3 = st.columns(3)
-        
-        with col1:
-            if st.button("Retry Quiz", width="stretch"):
+        # Try Again button appears here when quiz is completed
+        if st.session_state.per_quiz_submitted:
+            st.markdown("<br>", unsafe_allow_html=True)
+            if st.button("🔄 Try Again", width="stretch"):
                 st.session_state.per_quiz_answers = [None, None, None]
                 st.session_state.per_quiz_submitted = False
                 st.session_state.per_quiz_score = 0
+                st.session_state.per_current_question = 0
                 st.rerun()
-        
-        with col2:
-            if st.button("Back to Main", width='stretch'):
-                # Increment navigation counter and clear region state
-                st.session_state.nav_counter += 1
-                if 'current_region' in st.session_state:
-                    del st.session_state['current_region']
-                st.switch_page("main_app.py")
-        
-        with col3:
-            if st.button(f"Back to {current_region}", width='stretch'):
-                # Increment navigation counter for fresh render
-                st.session_state.nav_counter += 1
-                # Determine which region page to go back to
-                if current_region == "Hong Kong":
-                    st.switch_page("pages/1_hk.py")
-                elif current_region == "China":
-                    st.switch_page("pages/2_cn.py")
-                elif current_region == "Vietnam":
-                    st.switch_page("pages/3_vn.py")
     
-    # Display current progress
-    display_progress()
+    with quiz_col:
+        # Display current question
+        if not st.session_state.per_quiz_submitted:
+            q = quiz_data[current_q_index]
+            
+            # Box 1: Header with Quiz Time and question number
+            st.markdown(f"""
+            <div style="background: white; padding: 0.5rem 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 0.5rem;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="font-size: 1.2rem;">📝</span>
+                    <span style="font-weight: 600; font-size: 1rem;">Quiz Time!</span>
+                    <span style="margin-left: auto; color: #666; font-size: 0.85rem;">Question {current_q_index + 1} of {len(quiz_data)}</span>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            # Box 2: Question and answer options in a simple white container
+            with st.container(border=True):
+                st.markdown(f"**{current_q_index + 1}. {q['question']}**")
+                
+                # Get current answer
+                current_answer = st.session_state.per_quiz_answers[current_q_index]
+                
+                # Radio buttons for options
+                user_answer = st.radio(
+                    "Select your answer:",
+                    q["options"],
+                    key=f"per_q{current_q_index}_{current_region}_{st.session_state.nav_counter}",
+                    index=None if current_answer is None else q["options"].index(current_answer),
+                    label_visibility="collapsed"
+                )
+                
+                # Store the answer
+                if user_answer:
+                    st.session_state.per_quiz_answers[current_q_index] = user_answer
+            
+            # Box 3: Navigation buttons - simple approach
+            st.markdown("<div style='margin-top: 1rem;'></div>", unsafe_allow_html=True)
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                if current_q_index > 0:
+                    if st.button("← Back", width="stretch", key="back_q"):
+                        st.session_state.per_current_question -= 1
+                        st.rerun()
+            
+            with col2:
+                if current_q_index < len(quiz_data) - 1:
+                    if st.button("Next →", width="stretch", key="next_q"):
+                        st.session_state.per_current_question += 1
+                        st.rerun()
+                else:
+                    # Submit button on last question
+                    if st.button("Submit Answer", type="primary", width="stretch", key="submit_quiz"):
+                            # Check if all questions are answered
+                            if None in st.session_state.per_quiz_answers:
+                                st.error("Please answer all questions before submitting.")
+                            else:
+                                # Calculate score
+                                score = 0
+                                for i, quiz_q in enumerate(quiz_data):
+                                    if st.session_state.per_quiz_answers[i] == quiz_q["correct_answer"]:
+                                        score += 1
+                                
+                                st.session_state.per_quiz_score = score
+                                st.session_state.per_quiz_submitted = True
+                                
+                                # Save stars using star_manager
+                                star_manager.update_stars(current_region, 'Performance', score)
+                                
+                                st.rerun()
+        
+        # Display results if submitted
+        else:
+            # Different message and style based on score
+            if st.session_state.per_quiz_score == 0:
+                st.error(f"😔 Quiz completed. You earned {st.session_state.per_quiz_score} stars.")
+                # Snow effect for 0 stars (gentle, contemplative)
+                st.markdown("""
+                <style>
+                @keyframes snowfall {
+                    0% { transform: translateY(-10vh) translateX(0px); opacity: 1; }
+                    100% { transform: translateY(100vh) translateX(100px); opacity: 0; }
+                }
+                .snowflake {
+                    position: fixed;
+                    top: -10vh;
+                    color: #ddd;
+                    user-select: none;
+                    pointer-events: none;
+                    animation: snowfall 3s linear infinite;
+                    z-index: 1000;
+                }
+                </style>
+                <div class="snowflake" style="left: 10%; animation-delay: 0s;">❄️</div>
+                <div class="snowflake" style="left: 20%; animation-delay: 0.5s;">❄️</div>
+                <div class="snowflake" style="left: 30%; animation-delay: 1s;">❄️</div>
+                <div class="snowflake" style="left: 40%; animation-delay: 1.5s;">❄️</div>
+                <div class="snowflake" style="left: 50%; animation-delay: 2s;">❄️</div>
+                <div class="snowflake" style="left: 60%; animation-delay: 2.5s;">❄️</div>
+                <div class="snowflake" style="left: 70%; animation-delay: 0.8s;">❄️</div>
+                <div class="snowflake" style="left: 80%; animation-delay: 1.2s;">❄️</div>
+                <div class="snowflake" style="left: 90%; animation-delay: 1.8s;">❄️</div>
+                """, unsafe_allow_html=True)
+            else:
+                st.success(f"🎉 Completed! You earned {st.session_state.per_quiz_score} stars!")
+                # Balloons effect for score > 0
+                st.balloons()
+            
+            # Display star visualization
+            stars_display = "⭐" * st.session_state.per_quiz_score + "☆" * (3 - st.session_state.per_quiz_score)
+            st.markdown(f"<div style='text-align: center; font-size: 2rem; margin: 1rem 0;'>{stars_display}</div>", unsafe_allow_html=True)
+            
+            # Show encouragement message based on score
+            encouragement_msg = get_encouragement_message(st.session_state.per_quiz_score, current_region)
+            st.info(encouragement_msg)
+            
+            # Show correct answers with tighter spacing
+            st.markdown("---")
+            st.markdown("**Question Review:**")
+            review_text = ""
+            for i, q in enumerate(quiz_data):
+                user_answer = st.session_state.per_quiz_answers[i]
+                correct_answer = q["correct_answer"]
+                is_correct = user_answer == correct_answer
+                
+                if is_correct:
+                    review_text += f"✅ **Q{i+1}:** Correct!  \n"
+                else:
+                    review_text += f"❌ **Q{i+1}:** {correct_answer}  \n"
+            
+            st.markdown(review_text, unsafe_allow_html=True)
+    
+    # Sidebar
+    with st.sidebar:
+        if logo_path.exists():
+            st.image(str(logo_path), width=200)
+        else:
+            st.markdown(
+                """
+                <div style="text-align:center; padding:1rem 0;">
+                    <h3>🌍 Culturo</h3>
+                    <p style="font-size:0.8rem; color:#666; margin:0;">Discover culture all the world!</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+        if st.button("← General", key="sidebar_general_per", width="stretch"):
+            st.session_state.nav_counter += 1
+            if 'current_region' in st.session_state:
+                del st.session_state['current_region']
+            st.switch_page("main_app.py")
+
+        with st.expander("Discover", expanded=True):
+            if st.button("China", key="nav_cn_from_per", width="stretch", disabled=(current_region == "China")):
+                if current_region != "China":
+                    st.session_state.current_region = "China"
+                    st.switch_page("pages/2_cn.py")
+            if st.button("Hong Kong", key="nav_hk_from_per", width="stretch", disabled=(current_region == "Hong Kong")):
+                if current_region != "Hong Kong":
+                    st.session_state.current_region = "Hong Kong"
+                    st.switch_page("pages/1_hk.py")
+            if st.button("Viet Nam", key="nav_vn_from_per", width="stretch", disabled=(current_region == "Vietnam")):
+                if current_region != "Vietnam":
+                    st.session_state.current_region = "Vietnam"
+                    st.switch_page("pages/3_vn.py")
 
 if __name__ == "__main__":
     main()

@@ -256,7 +256,170 @@ def main():
     # Combined Header and Statistics Section
     stats = star_manager.get_overall_stats()
     total_stars = stats['total_stars']
-    explored_countries = len([region for region in ['china', 'vietnam', 'hongkong'] if stats.get(f'{region}_stars', 0) > 0])
+    
+    # Calculate explored countries based on 4/4 activities completed
+    china_stars = star_manager.get_stars('China')
+    vietnam_stars_dict = star_manager.get_stars('Vietnam')
+    hongkong_stars = star_manager.get_stars('Hong Kong')
+    
+    china_completed_activities = sum(1 for activity in ['Draw Animals', 'Language', 'Performance', 'Food'] 
+                                      if china_stars.get(activity, 0) > 0)
+    vietnam_completed_activities = sum(1 for activity in ['Draw Animals', 'Language', 'Performance', 'Food'] 
+                                        if vietnam_stars_dict.get(activity, 0) > 0)
+    hongkong_completed_activities = sum(1 for activity in ['Draw Animals', 'Language', 'Performance', 'Food'] 
+                                         if hongkong_stars.get(activity, 0) > 0)
+    
+    explored_countries = 0
+    if china_completed_activities == 4:
+        explored_countries += 1
+    if vietnam_completed_activities == 4:
+        explored_countries += 1
+    if hongkong_completed_activities == 4:
+        explored_countries += 1
+    
+    # Show congratulations if all 3 countries are completed
+    if explored_countries == 3:
+        # Add balloons effect
+        st.balloons()
+        
+        # Enhanced confetti and celebration effects
+        st.markdown("""
+            <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+            <script>
+                // Multiple confetti effects for celebration
+                var duration = 5 * 1000;
+                var end = Date.now() + duration;
+                
+                // Continuous confetti from both sides
+                (function frame() {
+                    confetti({
+                        particleCount: 8,
+                        angle: 60,
+                        spread: 60,
+                        origin: { x: 0, y: 0.6 },
+                        colors: ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7']
+                    });
+                    confetti({
+                        particleCount: 8,
+                        angle: 120,
+                        spread: 60,
+                        origin: { x: 1, y: 0.6 },
+                        colors: ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7']
+                    });
+
+                    if (Date.now() < end) {
+                        requestAnimationFrame(frame);
+                    }
+                }());
+                
+                // Additional burst effects
+                setTimeout(() => {
+                    confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#fd79a8', '#fdcb6e']
+                    });
+                }, 500);
+                
+                setTimeout(() => {
+                    confetti({
+                        particleCount: 50,
+                        angle: 60,
+                        spread: 55,
+                        origin: { x: 0 },
+                        colors: ['#74b9ff', '#0984e3', '#00b894', '#00cec9']
+                    });
+                    confetti({
+                        particleCount: 50,
+                        angle: 120,
+                        spread: 55,
+                        origin: { x: 1 },
+                        colors: ['#e17055', '#d63031', '#fdcb6e', '#e84393']
+                    });
+                }, 1500);
+            </script>
+            
+            <style>
+                /* Floating emoji animation */
+                @keyframes float {
+                    0%, 100% { 
+                        transform: translateY(0) rotate(0deg); 
+                        opacity: 1; 
+                    }
+                    25% { 
+                        transform: translateY(-20px) rotate(5deg); 
+                        opacity: 0.8; 
+                    }
+                    50% { 
+                        transform: translateY(-15px) rotate(-3deg); 
+                        opacity: 0.9; 
+                    }
+                    75% { 
+                        transform: translateY(-25px) rotate(8deg); 
+                        opacity: 0.7; 
+                    }
+                }
+                
+                @keyframes sparkle {
+                    0%, 100% { 
+                        transform: scale(0.8) rotate(0deg); 
+                        opacity: 0.7; 
+                    }
+                    50% { 
+                        transform: scale(1.2) rotate(180deg); 
+                        opacity: 1; 
+                    }
+                }
+                
+                .floating-emoji {
+                    position: fixed;
+                    font-size: 2rem;
+                    pointer-events: none;
+                    z-index: 1000;
+                    animation: float 3s ease-in-out infinite;
+                }
+                
+                .sparkle {
+                    position: fixed;
+                    font-size: 1.5rem;
+                    pointer-events: none;
+                    z-index: 1001;
+                    animation: sparkle 2s ease-in-out infinite;
+                }
+            </style>
+            
+            <!-- Floating celebration emojis -->
+            <div class="floating-emoji" style="top: 10%; left: 10%; animation-delay: 0s;">🎊</div>
+            <div class="floating-emoji" style="top: 15%; right: 15%; animation-delay: 0.5s;">🎉</div>
+            <div class="floating-emoji" style="top: 25%; left: 20%; animation-delay: 1s;">🌟</div>
+            <div class="floating-emoji" style="top: 20%; right: 25%; animation-delay: 1.5s;">✨</div>
+            <div class="floating-emoji" style="top: 35%; left: 15%; animation-delay: 2s;">🎈</div>
+            <div class="floating-emoji" style="top: 30%; right: 20%; animation-delay: 2.5s;">🏆</div>
+            
+            <!-- Sparkle effects -->
+            <div class="sparkle" style="top: 18%; left: 30%; animation-delay: 0.3s;">⭐</div>
+            <div class="sparkle" style="top: 28%; right: 30%; animation-delay: 0.8s;">💫</div>
+            <div class="sparkle" style="top: 22%; left: 50%; animation-delay: 1.3s;">✨</div>
+            <div class="sparkle" style="top: 32%; right: 50%; animation-delay: 1.8s;">🌟</div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 20px; text-align: center; margin: 1rem 0 2rem 0; box-shadow: 0 10px 30px rgba(0,0,0,0.2); border: 3px solid #ffd700;">
+                <h1 style="color: white; font-size: 2.5rem; margin: 0; animation: bounce 1s ease infinite;">🎉 Congratulations! 🎉</h1>
+                <p style="color: white; font-size: 1.3rem; margin: 1rem 0 0 0;">Great job, explorer! You've completed your cultural adventure!</p>
+                <p style="color: #f0f0f0; font-size: 1rem; margin: 0.5rem 0 0 0;">We hope you had fun discovering amazing traditions from around the world! 🌍✨</p>
+                <div style="margin-top: 1rem; font-size: 1.2rem; color: #ffd700;">
+                    🏆 CULTURAL MASTER ACHIEVED! 🏆
+                </div>
+            </div>
+            <style>
+                @keyframes bounce {
+                    0%, 100% { transform: translateY(0) scale(1); }
+                    50% { transform: translateY(-10px) scale(1.02); }
+                }
+            </style>
+        """, unsafe_allow_html=True)
     
     # Header text at top of page
     st.markdown("""

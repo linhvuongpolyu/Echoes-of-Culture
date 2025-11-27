@@ -88,7 +88,7 @@ def display_drawing_interface(region):
     # Header: Back button, title, and stars in the same row
     header_left, header_middle, header_right = st.columns([0.1, 0.75, 0.15])
     with header_left:
-        back_clicked = st.button("←\nBack", key="back_btn", use_container_width=True)
+        back_clicked = st.button("←\nBack", key="back_btn", width='stretch')
     with header_middle:
         # Get flag URL based on region
         flag_urls = {
@@ -100,18 +100,18 @@ def display_drawing_interface(region):
         
         # Get region color
         region_colors = {
-            'Vietnam': '#E53935',
-            'China': '#D32F2F',
-            'Hong Kong': '#C62828'
+          'Vietnam': '#1C8575',  # VN teal-green
+          'China': '#DE5862',    # China warm red
+          'Hong Kong': '#DA901E' # HK amber
         }
-        region_color = region_colors.get(region, '#E53935')
+        region_color = region_colors.get(region, '#1C8575')
         
         st.markdown(f"""
             <div class="vn-header">
                 <img src="{flag_url}" width="50" height="33" style="border-radius: 3px;" />
                 <div style="display: flex; flex-direction: column;">
                     <h2 style="margin: 0; padding: 0; color: {region_color}; font-size: 1.6rem; font-weight: 600; line-height: 1;">Drawing</h2>
-                    <p style="margin: 0; padding: 0; color: #666; font-size: 0.9rem; line-height: 1;">Let's enjoy and discovery with us</p>
+                    <p style="margin: 0; padding: 0; color: #666; font-size: 0.9rem; line-height: 1;">Draw each country's animals your way</p>
                 </div>
             </div>
         """, unsafe_allow_html=True)
@@ -170,7 +170,7 @@ def display_drawing_interface(region):
                 </div>
                 """, unsafe_allow_html=True)
             else:
-                st.image(reference_image_path, use_container_width=True)
+                st.image(reference_image_path, width='stretch')
         else:
             st.markdown(
                 f"""
@@ -189,7 +189,7 @@ def display_drawing_interface(region):
         # Submit button below reference
         if st.session_state[f'drawing_completed_{region}']:
             st.success("🎉 Completed! You earned 3 stars!")
-            if st.button("🔄 Reset Drawing", use_container_width=True, key="reset_left"):
+            if st.button("🔄 Reset Drawing", width='stretch', key="reset_left"):
                 st.session_state[f'drawing_completed_{region}'] = False
                 star_manager.update_stars(region, 'Draw Animals', 0)
                 st.rerun()
@@ -205,7 +205,7 @@ def display_drawing_interface(region):
             }
             </style>
             """, unsafe_allow_html=True)
-            if st.button("🖌️ Submit Drawing", type="primary", use_container_width=True, key="submit_left"):
+            if st.button("🖌️ Submit Drawing", type="primary", width='stretch', key="submit_left"):
                 # Mark as completed and award stars
                 st.session_state[f'drawing_completed_{region}'] = True
                 st.session_state[f'show_balloons_{region}'] = True
@@ -232,7 +232,7 @@ def display_drawing_interface(region):
             <button id="undoBtn" style="padding:6px 12px; border:1px solid #E0E0E0; border-radius:5px; background:#fff; cursor:pointer; font-size:0.85rem;">↩️ Undo</button>
             <button id="downloadBtn" style="padding:6px 12px; border:1px solid #4F48E8; border-radius:5px; background:#4F48E8; color:#fff; cursor:pointer; font-size:0.85rem;">💾 Save</button>
           </div>
-          <canvas id="drawCanvas" width="800" height="420" style="border:1px solid #E0E0E0; touch-action: none; display:block; background:#fff; border-radius:8px; cursor:crosshair;"></canvas>
+          <canvas id="drawCanvas" width="800" height="430" style="border:1px solid #E0E0E0; touch-action: none; display:block; background:#fff; border-radius:8px; cursor:crosshair;"></canvas>
         </div>
 
         <script>
@@ -256,10 +256,10 @@ def display_drawing_interface(region):
           const HISTORY_LIMIT = 30;
           const history = [];
           
-          // Load saved drawing on init
+          // Load saved drawing on init (using sessionStorage instead of localStorage)
           function loadDrawing(){{
             try{{
-              const savedData = localStorage.getItem(storageKey);
+              const savedData = sessionStorage.getItem(storageKey);
               if(savedData){{
                 const img = new Image();
                 img.onload = function(){{
@@ -272,11 +272,11 @@ def display_drawing_interface(region):
             }}
           }}
           
-          // Save drawing to localStorage
+          // Save drawing to sessionStorage (will be cleared when browser/tab closes)
           function saveDrawing(){{
             try{{
               const dataURL = canvas.toDataURL('image/png');
-              localStorage.setItem(storageKey, dataURL);
+              sessionStorage.setItem(storageKey, dataURL);
             }}catch(e){{
               console.warn('Failed to save drawing', e);
             }}

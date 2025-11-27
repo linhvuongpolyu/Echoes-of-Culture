@@ -1,9 +1,26 @@
 # Culturo - Cultural Knowledge Exploration App
-# Core dependencies for Streamlit-based application
+# Educational interactive application for cultural learning
+# Python 3.8+ required
 
-# Streamlit framework
+# Core web framework - main application interface
 streamlit>=1.28.0
 
-# For HTTP requests (kept for potential future use)
-requests>=2.31.0
+# Image processing - for drawing activities and media handling
 Pillow>=10.0.0
+
+# HTTP requests - for potential future API integrations
+requests>=2.31.0
+
+# Additional utilities (automatically installed with Streamlit)
+# pandas - for data manipulation
+# numpy - for numerical operations
+# altair - for data visualization
+# plotly - for interactive charts
+# protobuf - for data serialization
+
+# Development dependencies (optional)
+# streamlit-drawable-canvas - for enhanced drawing features (future)
+# streamlit-audio-recorder - for audio recording (future)
+
+# Note: All Streamlit dependencies are automatically managed
+# This file contains only the essential requirements for core functionality

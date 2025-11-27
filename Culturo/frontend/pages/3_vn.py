@@ -142,17 +142,33 @@ def vietnam_page():
             if st.button("Hong Kong", key="nav_hongkong", width="stretch", disabled=False):
                 st.switch_page("pages/1_hk.py")
     
-    # Header: Back button and flag/title in the same row (restore flag per request)
-    header_left, header_right = st.columns([0.1, 0.9])
+    # Get Vietnam stars data from star_manager
+    stars = star_manager.get_stars("Vietnam")
+    total_stars = star_manager.get_total_stars("Vietnam")
+    
+    # Calculate completed activities (activities with stars > 0)
+    completed_activities = sum(1 for activity_stars in stars.values() if activity_stars > 0)
+    total_activities = len(stars)
+    
+    # Header: Back button, flag/title, and progress counter
+    header_left, header_middle, header_right = st.columns([0.1, 0.7, 0.2])
     with header_left:
-        back_clicked = st.button("←\nBack", key="back_btn", use_container_width=True)
-    with header_right:
+        back_clicked = st.button("←\nBack", key="back_btn", width='stretch')
+    with header_middle:
         st.markdown("""
             <div class="vn-header">
                 <img src="https://flagcdn.com/w80/vn.png" width="50" height="33" style="border-radius: 3px;" />
                 <div style="display: flex; flex-direction: column;">
                     <h2 style="margin: 0; padding: 0; color: #E53935; font-size: 1.6rem; font-weight: 600; line-height: 1;">Viet Nam</h2>
                     <p style="margin: 0; padding: 0; color: #666; font-size: 0.9rem; line-height: 1;">Choose an activity to explore!</p>
+                </div>
+            </div>
+        """, unsafe_allow_html=True)
+    with header_right:
+        st.markdown(f"""
+            <div style="text-align: right; padding-top: 8px;">
+                <div style="font-size: 0.95rem; color: #666; font-weight: 600;">
+                    Activities Completed: <span style="font-size: 1.1rem; color: #E53935; font-weight: 700; margin-left: 4px;">{completed_activities}/{total_activities}</span>
                 </div>
             </div>
         """, unsafe_allow_html=True)
@@ -164,10 +180,6 @@ def vietnam_page():
         st.switch_page("main_app.py")
     
     st.markdown("<br>", unsafe_allow_html=True)
-    
-    # Get Vietnam stars data from star_manager
-    stars = star_manager.get_stars("Vietnam")
-    total_stars = star_manager.get_total_stars("Vietnam")
     
     # Main layout: Activities grid on left, map on right
     col_left, col_right = st.columns([1, 1.2])
