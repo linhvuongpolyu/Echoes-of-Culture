@@ -44,15 +44,14 @@ def get_system_info():
     }
 
 def setup_directories():
-    """Ensure required directories exist"""
+    """Ensure required directories exist and reset progress for fresh start"""
     data_dir = Path(__file__).parent / "data"
     data_dir.mkdir(exist_ok=True)
     
-    # Create initial stars.json if it doesn't exist
+    # Always reset stars.json for fresh start every time
     stars_file = data_dir / "stars.json"
-    if not stars_file.exists():
-        stars_file.write_text('{}')
-        print("📁 Created initial data directory")
+    stars_file.write_text('{}')
+    print("🔄 Reset progress data for fresh learning experience")
 
 def main():
     """Start the Streamlit application with enhanced setup"""
@@ -96,7 +95,7 @@ def main():
     print("\n⌨️  Web Application Controls:")
     print("   • Web app opens automatically in your default browser")
     print("   • Press Ctrl+C in this terminal to stop the web server")
-    print("   • Your learning progress is automatically saved locally")
+    print("   • Fresh start every time - progress resets on each launch")
     print("   • Close browser tab anytime - server keeps running until stopped")
     
     print("\n" + "=" * 70)

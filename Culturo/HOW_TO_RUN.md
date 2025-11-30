@@ -105,12 +105,14 @@ streamlit run main_app.py --server.headless false
 
 ## 💾 Data Management
 
-- **Progress Storage**: Automatically saved locally in `data/stars.json`
-- **Session Persistence**: Progress saved between browser sessions
-- **Web-Safe Storage**: Uses local file system (not browser cookies)
-- **Reset Option**: Delete `data/stars.json` to reset all progress
+- **Fresh Start**: Progress automatically resets every time you launch the app
+- **Session Progress**: Stars and achievements persist during current session only
+- **Demo Mode**: Perfect for demonstrations and multiple users
+- **Data Storage**: Uses `data/stars.json` for temporary session storage
 - **Privacy**: All data stored locally on your computer
 - **No Internet Required**: Fully offline web application
+
+**Note**: Each app restart provides a fresh learning experience from the beginning.
 
 ## 🔧 Troubleshooting
 
